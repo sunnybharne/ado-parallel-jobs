@@ -1,0 +1,29 @@
+# Variables Scopes: Root level, Stage level, Job level
+
+variables:
+  global_variable: 'Global Variable' # Root Level, this is aviailable to all stages and jobs
+
+pool: default
+
+stages:
+- stage: stage_A
+  Jobs:
+  - job: job_A1
+    variables:
+      job_variable: 'Job Variable' # Job Level, this is available to all steps in this job
+    steps:
+    - script: |
+            echo "Global Variable accessed through /$(variableIdentifile): $(global_variable)"
+            echo "Job Variable accessed throug /$(variableIdentifile):  $(job_variable)"
+            echo "Global Variable accessed through /${{ variables.global_variableidentifiler }} : ${{ variables.global_variable }}"
+            echo "Job Variable accessed through /${{ variables.job_variableidentifiler }} : ${{ variables.job_variable }}"
+            echo "Global variable access through /$[ variables['global_variableidentifiler'] ] : $[ variables['global_variable'] ]"
+            echo "Job variable access through /$[ variables['job_variableidentifiler'] ] : $[ variables['job_variable'] ]"
+            echo "Global variable accessed through script env $GLOBAL_VARIABLEIDENTIFILER : $GLOBAL_VARIABLE"
+            echo "Job variable accessed through script env $JOB_VARIABLEIDENTIFILER : $JOB_VARIABLE"
+      displayName: 'Print Variables'
+
+    
+  
+
+

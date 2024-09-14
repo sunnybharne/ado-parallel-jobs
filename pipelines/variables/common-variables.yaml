@@ -1,0 +1,9 @@
+# Variables Scopes: Root level, Stage level, Job level
+# Varables Syntax: macro,template expression and runtime 
+# Expressions 
+# Runtime Parameters
+variables:
+  - name: parallelJobs
+    value: 'parallelJob1 parallelJob2 parallelJob3 parallelJob4 parallelJob5 parallelJob6 parallelJob7 parallelJob8 parallelJob9 parallelJob10 parallelJob11 parallelJob12 parallelJob13 parallelJob14 parallelJob15 parallelJob16 parallelJob17 parallelJob18 parallelJob19 parallelJob20 parallelJob21 parallelJob22 parallelJob23 parallelJob24 parallelJob25 parallelJob26 parallelJob27 parallelJob28 parallelJob29 parallelJob30 parallelJob31 parallelJob32 parallelJob33 parallelJob34 parallelJob35 parallelJob36 parallelJob37 parallelJob38 parallelJob39 parallelJob40 parallelJob41 parallelJob42 parallelJob43 parallelJob44 parallelJob45 parallelJob46 parallelJob47 parallelJob48 parallelJob49 parallelJob50 parallelJob51 parallelJob52 parallelJob53 parallelJob54 parallelJob55 parallelJob56 parallelJob57 parallelJob58 parallelJob59 parallelJob60 parallelJob61 parallelJob62 parallelJob63 parallelJob64 parallelJob65 parallelJob66 parallelJob67 parallelJob68 parallelJob69 parallelJob70 parallelJob71 parallelJob72 parallelJob73 parallelJob74 parallelJob75 parallelJob76 parallelJob77 parallelJob78 parallelJob79 parallelJob80 parallelJob81 parallelJob82 parallelJob83 parallelJob84 parallelJob85 parallelJob86 parallelJob87 parallelJob88 parallelJob89 parallelJob90 parallelJob91 parallelJob92 parallelJob93 parallelJob94 parallelJob95 parallelJob96 parallelJob97 parallelJob98 parallelJob99 parallelJob100'
+
+

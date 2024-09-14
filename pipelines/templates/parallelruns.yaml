@@ -1,0 +1,14 @@
+
+parameters:
+  name: testparam
+  type: string
+
+jobs:
+- ${{ each env in split( parameters['testparam'], ' ')}}:
+  - job: ${{ env }}
+    # strategy:
+    #   maxparallel: 
+    #     number: 100
+    steps:
+      - script: echo ${{ env }}
+    displayName: 'Print ${{ env }}'

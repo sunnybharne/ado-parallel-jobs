@@ -1,0 +1,67 @@
+name: parallel-job
+
+trigger:
+  branches:
+    include:
+    - main
+
+pool: default
+
+# Variables Scopes: Root level, Stage level, Job level
+variables:
+  global_variable: 'Global Variable' # Root Level, this is aviailable to all stages and jobs
+
+stages:
+- stage: stage
+  jobs:
+  - job: Job
+    variables:
+      job_variable: 'Job Variable' # Job Level, this is available to all steps in this job
+    steps:
+    - script: |
+            echo $(global_variable)
+            echo $(job_variable)
+            echo ${{ variables.global_variable }}
+            echo ${{ variables.job_variable }}
+            echo $[variables['global_variable']]
+            echo $[variables['job_variable']]
+            echo $GLOBAL_VARIABLE
+            echo $JOB_VARIABLE
+      displayName: 'Variables scope'
+
+ 
+# variables:
+# - template: variables.yaml
+
+# - template: variables/variables-scope.yaml
+
+# stages:
+# - stage: A
+#   jobs:
+#   - job: setVariable
+#     steps:
+#       - script: echo "##vso[task.setvariable variable=changedFiles;isOutput=true]$(parallelJobs)"
+#         displayName: 'Set variable'
+#         name: setVariable
+
+
+# - template: templates/parallelruns.yaml
+#   parameters:
+#     # testparam: "test1 test2"
+#     testparam: $[ stageDependencies.A.setVariable.outputs['setVariable.changedFiles'] ]
+
+    # parameters:
+    #   testparam: $[ dependencies.setVariable.outputs['setVariable.changedFiles'] ]
+
+# - stage: B
+#   variables: 
+#     files: $[[ stageDependencies.A.setVariable.outputs['setVariable.changedFiles'] ]]
+#   jobs:
+#   - ${{ each env in split( variables['files'] , ' ')}}:
+#     - job: ${{ env }}
+#       # strategy:
+#       #   maxparallel: 
+#       #     number: 100
+#       steps:
+#         - script: echo ${{ env }}
+#       displayName: 'Print ${{ env }}'

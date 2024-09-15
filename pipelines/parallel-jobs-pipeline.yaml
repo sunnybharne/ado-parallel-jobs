@@ -10,26 +10,78 @@ pool: default
 # Variables Scopes: Root level, Stage level, Job level
 variables:
   global_variable: 'Global Variable' # Root Level, this is aviailable to all stages and jobs
+  someBoolean: ${{ true }} # case insensitive, so True or TRUE also works
+  someNumber: ${{ -1.2 }}
+  someString: ${{ 'a b c' }}  # string must be single quoted, single quote is used to escape single quote
+  someVersion: ${{ 1.2.3 }}
+  coalesceVar: $[ coalesce('', 'literal so it always works') ]
+  files: 'file/path/dev.bicepparam file/path/test.bicepparam'
+  changedFiles: 'file/path/dev.bicepparam file/path/test.bicepparam file/path/prod.bicepparam'
 
 stages:
-- stage: stage
+- stage: variables_stage
   jobs:
-  - job: Job
+  - job: variables_job
     variables:
       job_variable: 'Job Variable' # Job Level, this is available to all steps in this job
     steps:
     - script: |
             echo $(global_variable)
             echo $(job_variable)
-            echo ${{ variables.global_variable }}
-            echo ${{ variables.job_variable }}
-            echo $[variables['global_variable']]
-            echo $[variables['job_variable']]
+            echo ${{ variables.global_variable }} # compile time variable expression
+            echo ${{ variables.job_variable }} # compile time variable expression
+            echo $[ variables.global_variable ] # runtime variable expression
+            echo $[ variables.job_variable ] # runtime variable expression
             echo $GLOBAL_VARIABLE
             echo $JOB_VARIABLE
-      displayName: 'Variables scope'
+      displayName: 'variables scope'
 
- 
+    - script: |
+            echo "You can use boolean, null, number, string or version literal in ado pipeline"
+            echo ${{ variables.someBoolean }}
+            echo ${{ variables.someNumber }}
+            echo ${{ variables.someString }}
+            echo ${{ variables.someVersion }}
+      displayName: 'variable litarals'
+
+    - script: |
+            echo ${{ variables.someBoolean }} # property dereference syntax
+            echo ${{ variables['someBoolean'] }}  # index syntax
+      displayName: 'variable syntax'
+
+    - script: |
+            echo "##vso[task.setvariable variable=finalChangeFile]file1 file2 file100"
+            
+      displayName: 'set finalChangeFile'
+
+    - script: |
+            echo "coalasce function" $(coalesceVar)
+      displayName: 'functions'
+
+    - bash: echo "##vso[task.setvariable variable=myStageVal;isOutput=true]file1 file2 file100"
+      name: MyOutputVar
+
+- stage: subscriptionVaribales
+  variables:
+    subChangedFiles: $[ stageDependencies.variables_stage.variables_job.outputs['MyOutputVar.myStageVal'] ]
+  jobs:
+  - job: subscriptionVaribales
+    steps:
+      - script: |
+         # Get length of the values in the subscriptionVaribales
+         subArray=$(subChangedFiles).split(' ')
+         echo "Length of the subscriptionVaribales is ${#subArray[@]}"
+    displayName: 'Print subscriptionVaribales'
+
+
+
+
+
+  # - job: getVariable
+  #   steps:
+  #     - script: echo $(parallelJobs)
+  #   displayName: 'Get variable'
+
 # variables:
 # - template: variables.yaml
 
